@@ -56,7 +56,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000', 'https://graduation-front-pn1dnwn77-funayamateppei.vercel.app'),
 
     'asset_url' => env('ASSET_URL'),
 
