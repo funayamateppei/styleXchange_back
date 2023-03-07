@@ -14,6 +14,7 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('guest')
+                // ->middleware('auth:sanctum')
                 ->name('login');
 
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
