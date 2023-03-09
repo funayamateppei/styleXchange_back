@@ -68,6 +68,13 @@ class User extends Authenticatable
     public function likedBy()
     {
         return $this->belongsToMany(Thread::class, 'thread_likes', 'user_id', 'thread_id')
-        ->withTimestamps();
+            ->withTimestamps();
+    }
+
+    // users:threads 多:多 ブックマーク機能
+    public function bookmarkedBy()
+    {
+        return $this->belongsToMany(Thread::class, 'thread_bookmarks', 'user_id', 'thread_id')
+            ->withTimestamps();
     }
 }

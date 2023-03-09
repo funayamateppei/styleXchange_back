@@ -47,4 +47,11 @@ class Thread extends Model
         return $this->belongsToMany(User::class, 'thread_likes', 'thread_id', 'user_id')
             ->withTimestamps();
     }
+
+    // threads:users 多:多 ブックマーク機能
+    public function bookmarkedThreads()
+    {
+        return $this->belongsToMany(User::class, 'thread_bookmarks', 'thread_id', 'user_id')
+            ->withTimestamps();
+    }
 }

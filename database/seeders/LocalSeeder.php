@@ -37,5 +37,14 @@ class LocalSeeder extends Seeder
                 $thread->likedThreads()->attach($user); // Threadモデルに定義している関数(リレーション定義)を使ってattach()
             }
         }
+
+        // threadのブックマーク機能のダミーデータ
+        foreach ($threads as $thread) {
+            $likesCount = rand(1, 3); // ランダムに1~3の数字を格納
+            $usersForLikes = $users->random($likesCount); // 各スレッドに1~3人のランダムのuserを割り当てる
+            foreach ($usersForLikes as $user) {
+                $thread->bookmarkedThreads()->attach($user); // Threadモデルに定義している関数(リレーション定義)を使ってattach()
+            }
+        }
     }
 }

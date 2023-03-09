@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('thread_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('thread_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('thread_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('path', 255);
             $table->string('original_file_name', 255);
             $table->timestamps();
