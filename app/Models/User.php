@@ -63,4 +63,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(ThreadComment::class);
     }
+
+    // users:threads 多:多 いいね機能
+    public function likedBy()
+    {
+        return $this->belongsToMany(Thread::class, 'thread_likes', 'user_id', 'thread_id')
+        ->withTimestamps();
+    }
 }

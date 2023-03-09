@@ -40,4 +40,11 @@ class Thread extends Model
     {
         return $this->hasMany(ThreadComment::class);
     }
+
+    // threads:users 多:多 いいね機能
+    public function likedThreads()
+    {
+        return $this->belongsToMany(User::class, 'thread_likes', 'thread_id', 'user_id')
+            ->withTimestamps();
+    }
 }
