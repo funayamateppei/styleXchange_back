@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Thread;
+use App\Models\ThreadComment;
 
 class User extends Authenticatable
 {
@@ -55,5 +56,11 @@ class User extends Authenticatable
     public function threads()
     {
         return $this->hasMany(Thread::class);
+    }
+
+    // users:thread_comments 1:多
+    public function threadComments()
+    {
+        return $this->hasMany(ThreadComment::class);
     }
 }

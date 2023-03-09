@@ -19,10 +19,13 @@ class LocalSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(50)
-            ->has(Thread::factory()->count(4)
-                ->has(ThreadImage::factory()->count(3))
-                ->has(ThreadComment::factory()->count(3)))
+        $users = User::factory()
+            ->count(50)
+            ->create();
+
+        Thread::factory()->count(100)->recycle($users)
+            ->has(ThreadImage::factory()->count(3))
+            ->has(ThreadComment::factory()->count(3)->recycle($users))
             ->create();
     }
 }
