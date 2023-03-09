@@ -20,7 +20,7 @@ class ThreadImageFactory extends Factory
     {
         return [
             'thread_id' => \App\Models\Thread::factory(),
-            'path' => fake()->imageUrl(),
+            'path' => 'thread_images/000000.jpg',
             'original_file_name' => fake()->file('public/thread_images', 'public/storage/thread_images', false),
         ];
     }
