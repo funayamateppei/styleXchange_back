@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\User;
 use App\Models\ThreadImage;
+use App\Models\ThreadComment;
 
 class Thread extends Model
 {
@@ -32,5 +33,11 @@ class Thread extends Model
     public function threadImages()
     {
         return $this->hasMany(ThreadImage::class);
+    }
+
+    // threads:thread_comments 1:多
+    public function threadComments()
+    {
+        return $this->hasMany(ThreadComment::class);
     }
 }

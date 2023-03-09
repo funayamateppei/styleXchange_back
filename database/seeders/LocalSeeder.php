@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Thread;
 use App\Models\ThreadImage;
+use App\Models\ThreadComment;
 
 class LocalSeeder extends Seeder
 {
@@ -20,7 +21,8 @@ class LocalSeeder extends Seeder
     {
         User::factory(50)
             ->has(Thread::factory()->count(4)
-                ->has(ThreadImage::factory()->count(3)))
+                ->has(ThreadImage::factory()->count(3))
+                ->has(ThreadComment::factory()->count(3)))
             ->create();
     }
 }
