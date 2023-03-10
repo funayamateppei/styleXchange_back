@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Follow extends Model
+class Evaluation extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
-        'user_id',
-        'following_id',
+    protected $fillable = [
+        'seller_id',
+        'buyer_id',
+        'item_id',
+        'rating',
+        'comment'
     ];
 }
