@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Thread;
 use App\Models\ThreadImage;
 use App\Models\ThreadComment;
+use App\Models\Item;
+use App\Models\Category;
 
 class LocalSeeder extends Seeder
 {
@@ -27,6 +29,13 @@ class LocalSeeder extends Seeder
         $threads = Thread::factory()->count(100)->recycle($users)
             ->has(ThreadImage::factory()->count(3))
             ->has(ThreadComment::factory()->count(3)->recycle($users))
+            ->has(
+                Item::factory()->count(2)->state(function (array $attributes, Thread $thread) use ($users) {
+                    return [
+                        'user_id' => $thread->user_id,
+                    ];
+                })
+            )
             ->create();
 
         // threadのいいね機能のダミーデータ

@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Thread;
 use App\Models\ThreadComment;
+use App\Models\Item;
 
 class User extends Authenticatable
 {
@@ -56,6 +57,12 @@ class User extends Authenticatable
     public function threads()
     {
         return $this->hasMany(Thread::class);
+    }
+
+    // users:items 1:多
+    public function items()
+    {
+        return $this->hasMany(Item::class);
     }
 
     // users:thread_comments 1:多
