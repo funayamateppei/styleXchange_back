@@ -59,4 +59,11 @@ class Item extends Model
     {
         return $this->hasMany(ItemComment::class);
     }
+
+    // items:users 多:多 いいね機能
+    public function likedItems()
+    {
+        return $this->belongsToMany(User::class, 'item_likes', 'item_id', 'user_id')
+        ->withTimestamps();
+    }
 }

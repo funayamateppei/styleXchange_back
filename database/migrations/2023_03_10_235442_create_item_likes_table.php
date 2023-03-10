@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('thread_bookmarks', function (Blueprint $table) {
+        Schema::create('item_likes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('thread_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->unique(['user_id', 'thread_id']);
+            $table->foreignId('item_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->unique(['user_id', 'item_id']);
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('thread_bookmarks');
+        Schema::dropIfExists('item_likes');
     }
 };
