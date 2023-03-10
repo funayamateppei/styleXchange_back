@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Thread;
 use App\Models\Category;
+use App\Models\ItemImage;
 
 class Item extends Model
 {
@@ -44,5 +45,11 @@ class Item extends Model
     public function categories()
     {
         return $this->hasMany(Category::class);
+    }
+
+    // items:item_images 1:多
+    public function itemImages()
+    {
+        return $this->hasMany(ItemImage::class);
     }
 }
