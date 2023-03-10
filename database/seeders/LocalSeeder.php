@@ -10,6 +10,7 @@ use App\Models\Thread;
 use App\Models\ThreadImage;
 use App\Models\ThreadComment;
 use App\Models\Item;
+use App\Models\ItemComment;
 use App\Models\ItemImage;
 
 class LocalSeeder extends Seeder
@@ -36,7 +37,8 @@ class LocalSeeder extends Seeder
                         'user_id' => $thread->user_id, // thread1つに対してitem2件作成 thread作成者のuser_id格納
                     ];
                 })
-                ->has(ItemImage::factory()->count(2)) // item1つに対して2件画像作成
+                    ->has(ItemImage::factory()->count(2)) // item1つに対して2件画像作成
+                    ->has(ItemComment::factory()->count(3)->recycle($users)) // item1つに対してコメント3件作成
             )
             ->create();
 

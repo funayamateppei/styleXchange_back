@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Thread;
 use App\Models\Category;
 use App\Models\ItemImage;
+use App\Models\ItemComment;
 
 class Item extends Model
 {
@@ -51,5 +52,11 @@ class Item extends Model
     public function itemImages()
     {
         return $this->hasMany(ItemImage::class);
+    }
+
+    // items:item_comments 1:多
+    public function itemComments()
+    {
+        return $this->hasMany(ItemComment::class);
     }
 }
