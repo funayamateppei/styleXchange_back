@@ -66,4 +66,11 @@ class Item extends Model
         return $this->belongsToMany(User::class, 'item_likes', 'item_id', 'user_id')
         ->withTimestamps();
     }
+
+    // items:users 多:多 いいね機能
+    public function purchasedItems()
+    {
+        return $this->belongsToMany(User::class, 'purchasers', 'item_id', 'user_id')
+        ->withTimestamps();
+    }
 }

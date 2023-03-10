@@ -12,6 +12,7 @@ use App\Models\ThreadComment;
 use App\Models\Item;
 use App\Models\ItemComment;
 use App\Models\ItemImage;
+use App\Models\Follow;
 
 class LocalSeeder extends Seeder
 {
@@ -45,7 +46,7 @@ class LocalSeeder extends Seeder
         // threadのいいね機能のダミーデータ
         foreach ($threads as $thread) {
             $likesCount = rand(1, 3); // ランダムに1~3の数字を格納
-            $usersForLikes = $users->random($likesCount); // 各threadに1~3人のランダムのuserを割り当てる
+            $usersForLikes = $users->random($likesCount); // 作成した50人のユーザーからランダムに$likeCount人格納する
             foreach ($usersForLikes as $user) {
                 $thread->likedThreads()->attach($user); // Threadモデルに定義している関数(リレーション定義)を使ってattach()
             }
@@ -54,7 +55,7 @@ class LocalSeeder extends Seeder
         // threadのブックマーク機能のダミーデータ
         foreach ($threads as $thread) {
             $likesCount = rand(1, 3); // ランダムに1~3の数字を格納
-            $usersForLikes = $users->random($likesCount); // 各threadに1~3人のランダムのuserを割り当てる
+            $usersForLikes = $users->random($likesCount); // 作成した50人のユーザーからランダムに$likeCount人格納する
             foreach ($usersForLikes as $user) {
                 $thread->bookmarkedThreads()->attach($user); // Threadモデルに定義している関数(リレーション定義)を使ってattach()
             }
@@ -64,11 +65,33 @@ class LocalSeeder extends Seeder
         foreach ($threads as $thread) {
             foreach ($thread->items as $item) { //threadインスタンスに紐づいている$itemsを1つずつ取り出す(ループ)
                 $likesCount = rand(1, 3); // ランダムに1~3の数字を格納
-                $usersForLikes = $users->random($likesCount); // 各itemに1~3人のランダムのuserを割り当てる
+                $usersForLikes = $users->random($likesCount); // 作成した50人のユーザーからランダムに$likeCount人格納する
                 foreach ($usersForLikes as $user) {
                     $item->likedItems()->attach($user); // Itemモデルに定義している関数(リレーション定義)を使ってattach()
                 }
             }
         }
+
+        // itemsの購入履歴機能のダミーデータ
+        foreach ($threads as $thread) {
+            foreach ($thread->items as $item) { //threadインスタンスに紐づいている$itemsを1つずつ取り出す(ループ)
+                $likesCount = rand(1, 3); // ランダムに1~3の数字を格納
+                $usersForLikes = $users->random($likesCount); // 作成した50人のユーザーからランダムに$likeCount人格納する
+                foreach ($usersForLikes as $user) {
+                    $item->purchasedItems()->attach($user); // Itemモデルに定義している関数(リレーション定義)を使ってattach()
+                }
+            }
+        }
+
+        // フォロワー/フォローの関係を作成する
+        foreach ($users as $user) { // 作成したユーザー全員をまわす
+            // ユーザーのフォロワーを作成する
+            $followCount = rand(1, 10);
+            $usersForFollows = $users->random($followCount);
+            foreach ($usersForFollows as $followedUser) {
+                $user->followings()->attach($followedUser);
+            }
+        }
+
     }
 }
