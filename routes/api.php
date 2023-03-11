@@ -22,6 +22,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::get('/hoge', function (Request $request) {
     // こんな感じでレスポンスを作ります。
     return response()->json([
-        'hoge' => 'fuga',
+        'hoge' => 'hoge',
     ]);
 });
