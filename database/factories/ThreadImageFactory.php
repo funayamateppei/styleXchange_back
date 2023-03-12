@@ -18,10 +18,12 @@ class ThreadImageFactory extends Factory
      */
     public function definition()
     {
+        $filename = fake()->file('public/thread_images', 'public/storage/thread_images', false);
+        $path = "/storage/thread_images/$filename";
         return [
             'thread_id' => \App\Models\Thread::factory(),
-            'path' => 'thread_images/000000.jpg',
-            'original_file_name' => fake()->file('public/thread_images', 'public/storage/thread_images', false),
+            'path' => $path,
+            'original_file_name' => $filename,
         ];
     }
 }

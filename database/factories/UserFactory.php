@@ -17,16 +17,21 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $faker = \Faker\Factory::create();
-        $address = $faker->streetAddress() . $faker->city() . $faker->stateAbbr() . $faker->country();
+        // 住所のダミーデータ作成
+        $address = fake()->address();
+        $newAddress = substr($address, 8);
+        // アイコンのダミーデータ作成
+        $filename = fake()->file('public/icon_images', 'public/storage/icon_images', false);
+        $path = "/storage/icon_images/$filename";
+
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'icon_path' => 'item_images/000000.jpg',
+            'icon_path' => $path,
             'post_code' => fake()->postcode(),
-            'address' => $address,
+            'address' => $newAddress,
             'height' => fake()->numberBetween(150, 190),
             'remember_token' => Str::random(10),
         ];

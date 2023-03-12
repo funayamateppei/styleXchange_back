@@ -16,10 +16,12 @@ class ItemImageFactory extends Factory
      */
     public function definition()
     {
+        $filename = fake()->file('public/item_images', 'public/storage/item_images', false);
+        $path = "/storage/item_images/$filename";
         return [
             'item_id' => \App\Models\Item::factory(),
-            'path' => 'item_images/000000.jpg',
-            'original_file_name' => fake()->file('public/item_images', 'public/storage/item_images', false),
+            'path' => $path,
+            'original_file_name' => $filename,
         ];
     }
 }
