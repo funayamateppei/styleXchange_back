@@ -14,7 +14,9 @@ class MyResourceController extends Controller
     // ログインユーザーの情報
     public function data()
     {
-        $userData = User::with(['threads.threadImages', 'items.itemImages'])->find(Auth::id());
+        $userData = User::with(['threads.threadImages', 'items.itemImages'])
+            ->withCount(['followings as following_count', 'followers as follower_count'])
+            ->find(Auth::id());
         return response()->json($userData);
     }
 
