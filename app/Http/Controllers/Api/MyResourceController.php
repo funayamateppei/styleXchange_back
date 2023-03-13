@@ -27,17 +27,16 @@ class MyResourceController extends Controller
         return response()->json($allUserData);
     }
 
-    // ユーザーの情報
-    public function userData(Request $request)
-    {
-        $id = $request['id'];
-        $userData = User::with(['threads.threadImages', 'items.itemImages'])->find($id);
-        return response()->json($userData);
-    }
-
     public function me(Request $request)
     {
         $data = $request->user();
+        return response()->json($data);
+    }
+
+    public function isFollowing(Request $request)
+    {
+        $user = $request->user();
+        $data = User::with('followings')->find($user->id);
         return response()->json($data);
     }
 }
