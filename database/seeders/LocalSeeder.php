@@ -25,7 +25,7 @@ class LocalSeeder extends Seeder
     {
         // ユーザー50人作成
         $users = User::factory()
-            ->count(50)
+            ->count(20)
             ->create();
 
         // threads100件作成
@@ -86,7 +86,7 @@ class LocalSeeder extends Seeder
         // フォロワー/フォローの関係を作成する
         foreach ($users as $user) { // 作成したユーザー全員をまわす
             // ユーザーのフォロワーを作成する
-            $followCount = rand(1, 10);
+            $followCount = rand(5, 20);
             $usersForFollows = $users->random($followCount);
             foreach ($usersForFollows as $followedUser) {
                 $user->followings()->attach($followedUser);
