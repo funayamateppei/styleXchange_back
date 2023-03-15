@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\MyResourceController;
+use App\Http\Controllers\Api\UserResourceController;
+use App\Http\Controllers\Api\FollowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,26 +25,25 @@ Route::middleware(['auth:sanctum'])
         Route::get('/user', function (Request $request) {
             return $request->user();
         });
+        // Userとthreadとitemをまとめて返す
 
         // マイページ
         Route::prefix('/my')
-        ->name('my.')
-        ->group(function () {
-            // 全てのユーザーのデータを全て返す
-            Route::get('/allData', [MyResourceController::class, 'allData'])->name('allData');
-            // AuthUserとthreadとitemをまとめて返す
-            Route::get('/data', [MyResourceController::class, 'data'])->name('data');
-            // Userとthreadとitemをまとめて返す
-            Route::get('/data/{id}', [MyResourceController::class, 'userData'])->name('userData');
-            // SSR時にcookieを受け取ってログインしているユーザーを取得
-            Route::get('/data/me', [MyResourceController::class, 'me'])->name('me');
-        });
+            ->name('my.')
+            ->group(function () {
+                // 全てのユーザーのデータを全て返す
+                Route::get('/allData', [MyResourceController::class, 'allData'])->name('allData');
+                // AuthUserとthreadとitemをまとめて返す
+                Route::get('/data', [MyResourceController::class, 'data'])->name('data');
+            });
+        Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');
     });
+// フォロー欄 特定のユーザーとログインしているユーザーがフォロー済かの情報取得
+Route::get('/follows/{id}', [FollowController::class, 'getFollows'])->name('getFollows');
+// 特定のユーザーのマイページ情報
+Route::get('/user/{id}', [UserResourceController::class, 'userData'])->name('userData');
 
-// テスト用
-Route::get('/hoge', function (Request $request) {
-    // こんな感じでレスポンスを作ります。
-    return response()->json([
-        'hoge' => 'hoge',
-    ]);
-});
+
+// CSR+ISRからSSR+CSRに変更したのでお陀仏
+// フォロー欄に使用する情報を取得
+Route::get('/userIds', [FollowController::class, 'userIds'])->name('userIds');
