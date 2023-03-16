@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('text');
             $table->integer('price'); //価格
+            $table->boolean('gender'); // 0 man, 1 woman
             $table->foreignId('category_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete(); // カテゴリ
             $table->string('color')->nullable(); // 色
             $table->string('size')->nullable(); //サイズ

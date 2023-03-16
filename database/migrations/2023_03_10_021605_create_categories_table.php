@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('parent');
+            $table->string('gender'); // 0 man, 1 woman, 2 free
+            $table->boolean('big_category');
         });
     }
 
