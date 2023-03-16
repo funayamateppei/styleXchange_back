@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use App\Models\Category;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Item>
  */
@@ -25,13 +27,22 @@ class ItemFactory extends Factory
         $days = ['1~2日で発送', '2~3日で発送', '4~7日で発送'];
         $randomDays = $days[array_rand($days)];
 
+        $gender = fake()->boolean(50);
+        $categories = Category::where('big_category', false)
+        ->where('gender', $gender ? '!=' : '=', 1)
+        ->get()
+        ->pluck('id')
+        ->toArray();
+        $category_id = fake()->randomElement($categories);
+
         return [
             'thread_id' => \App\Models\Thread::factory(),
             'user_id' => \App\Models\User::factory(),
             'title' => fake()->colorName(),
             'text' => fake()->realText(150),
             'price' => fake()->numberBetween(300, 80000),
-            'category_id' => fake()->numberBetween(25, 208),
+            'gender' => $gender,
+            'category_id' => $category_id,
             'color' => fake()->colorName(),
             'size' => $randomSize,
             'condition' => $randomCondition,

@@ -21,6 +21,7 @@ class Item extends Model
         'title',
         'text',
         'price',
+        'gender',
         'category_id',
         'color',
         'size',
