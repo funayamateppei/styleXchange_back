@@ -12,7 +12,6 @@ use App\Models\ThreadComment;
 use App\Models\Item;
 use App\Models\ItemComment;
 use App\Models\ItemImage;
-use App\Models\Follow;
 
 class LocalSeeder extends Seeder
 {
@@ -23,7 +22,7 @@ class LocalSeeder extends Seeder
      */
     public function run()
     {
-        // ユーザー50人作成
+        // ユーザー20人作成
         $users = User::factory()
             ->count(20)
             ->create();
