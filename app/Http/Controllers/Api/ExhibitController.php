@@ -12,6 +12,7 @@ class ExhibitController extends Controller
     // 出品ページで使用するカテゴリ一覧を返す処理
     public function categories(Request $request)
     {
-        return Category::get();
+        $data = Category::get();
+        return response()->json($data);
     }
 }
