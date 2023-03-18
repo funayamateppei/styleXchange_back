@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('thread_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('title');
-            $table->string('text');
+            $table->string('title', 50);
+            $table->string('text', 1000);
             $table->integer('price'); //価格
             $table->boolean('gender'); // 0 man, 1 woman
             $table->foreignId('category_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete(); // カテゴリ

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\MyResourceController;
 use App\Http\Controllers\Api\UserResourceController;
 use App\Http\Controllers\Api\FollowController;
+use App\Http\Controllers\Api\ExhibitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,10 @@ Route::middleware(['auth:sanctum'])
             });
         Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');
     });
+
+// 出品ページで使うカテゴリの情報を返すエンドポイント
+Route::get('/categories', [ExhibitController::class, 'categories'])->name('categories');
+
 // フォロー欄 特定のユーザーとログインしているユーザーがフォロー済かの情報取得
 Route::get('/follows/{id}', [FollowController::class, 'getFollows'])->name('getFollows');
 // 特定のユーザーのマイページ情報
