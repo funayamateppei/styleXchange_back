@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('parent');
             $table->string('gender'); // 0 man, 1 woman, 2 free
             $table->boolean('big_category');
+            $table->integer('sort_number'); // 並び順
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -14,6 +14,9 @@ class Category extends Model
     protected $fillable = [
         'name',
         'parent',
+        'gender', // 0 man, 1 woman, 2 free
+        'big_category',
+        'sort_number',
     ];
 
     // categories:items 多:1
