@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Category;
-use Illuminate\Support\Facades\Log;
 
 class ExhibitController extends Controller
 {
@@ -15,12 +14,5 @@ class ExhibitController extends Controller
     {
         $data = Category::get();
         return response()->json($data);
-    }
-
-    // 出品処理
-    public function exhibit(Request $request)
-    {
-        $data = $request->all();
-        Log::debug($data);
     }
 }
