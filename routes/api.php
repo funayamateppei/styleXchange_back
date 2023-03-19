@@ -38,9 +38,6 @@ Route::middleware(['auth:sanctum'])
                 Route::get('/data', [MyResourceController::class, 'data'])->name('data');
             });
         Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');
-
-        // thread & item 投稿
-        Route::post('/exhibit', [ExhibitController::class, 'exhibit'])->name('exhibit');
     });
 
 // 出品ページで使うカテゴリの情報を返すエンドポイント
