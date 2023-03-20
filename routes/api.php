@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])
             });
         Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');
 
-        // thread & item 投稿
+        // threads $ thread_images & items & item_images 保存
         Route::post('/exhibit', [ExhibitController::class, 'exhibit'])->name('exhibit');
     });
 

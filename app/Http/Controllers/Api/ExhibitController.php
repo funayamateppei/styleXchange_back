@@ -6,6 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Category;
+use App\Models\Thread;
+use App\Models\ThreadImage;
+use App\Models\Item;
+use App\Models\ItemImage;
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ExhibitController extends Controller
@@ -20,7 +26,23 @@ class ExhibitController extends Controller
     // 出品処理
     public function exhibit(Request $request)
     {
-        $data = $request->all();
-        Log::debug($data);
+        // threadsに保存する情報
+        $thread = $request->input('thread');
+
+        // thread_imagesに保存する情報
+        $threadImages = $request->file('threadImages');
+
+        // itemsとitem_imagesに保存する情報
+        $items = $request->input('items');
+        $itemImages = $request->file('items');
+        foreach ($items as $key => $item) { // $itemsにpostで送られてきたファイルを格納
+            $items[$key]['images'] = $itemImages[$key]['images'];
+        }
+
+
+
+        // Log::debug($thread); // 確認用
+        // Log::debug($threadImages); // 確認用
+        // Log::debug($items); // 確認用
     }
 }
