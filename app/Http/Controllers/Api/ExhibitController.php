@@ -28,6 +28,7 @@ class ExhibitController extends Controller
     {
         // threadsに保存する情報
         $thread = $request->input('thread');
+        $threadResponse = Thread::create($thread);
 
         // thread_imagesに保存する情報
         $threadImages = $request->file('threadImages');
@@ -42,6 +43,7 @@ class ExhibitController extends Controller
 
 
         // Log::debug($thread); // 確認用
+        Log::debug($threadResponse); // 確認用
         // Log::debug($threadImages); // 確認用
         // Log::debug($items); // 確認用
     }
