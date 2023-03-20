@@ -15,6 +15,10 @@ class Item extends Model
 {
     use HasFactory;
 
+    protected $attribute = [
+        'sale' => true,
+    ];
+
     protected $fillable = [
         'thread_id',
         'user_id',

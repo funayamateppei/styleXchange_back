@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('condition'); // 洋服の状態(選択)
             $table->string('days'); // 発送までの日数(選択)
             $table->boolean('sale')->default(true); // 販売中or売切
-            $table->boolean('postage')->default(true); // 送料込みor着払い
+            $table->boolean('postage'); // 送料込みor着払い
             $table->timestamps();
         });
     }
