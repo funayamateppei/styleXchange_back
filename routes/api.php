@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\MyResourceController;
 use App\Http\Controllers\Api\UserResourceController;
 use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\ExhibitController;
+use App\Http\Controllers\Api\ThreadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,14 +20,13 @@ use App\Http\Controllers\Api\ExhibitController;
 |
 */
 
-Route::middleware(['auth:sanctum'])
+Route::middleware(['auth:sanctum']) // ログインしていないと使えないルーティング
     ->name('.api')
     ->group(function () {
-        // ログインしているユーザー
+        // ログインしているユーザーを取得
         Route::get('/user', function (Request $request) {
             return $request->user();
         });
-        // Userとthreadとitemをまとめて返す
 
         // マイページ
         Route::prefix('/my')
@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])
             });
         Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');
 
-        // threads $ thread_images & items & item_images 保存
+        // 出品処理 threads $ thread_images & items & item_images 保存
         Route::post('/exhibit', [ExhibitController::class, 'exhibit'])->name('exhibit');
     });
 
@@ -51,7 +51,13 @@ Route::get('/follows/{id}', [FollowController::class, 'getFollows'])->name('getF
 // 特定のユーザーのマイページ情報
 Route::get('/user/{id}', [UserResourceController::class, 'userData'])->name('userData');
 
+Route::prefix('/threads')
+    ->group(function () {
+        // 特定のthreadの情報 CSR+ISR
+        Route::get('/Ids', [ThreadController::class, 'getThreadIds'])->name('getThreadIds');
+        Route::get('/{id}', [ThreadController::class, 'getThread'])->name('getThread');
+    });
 
-// CSR+ISRからSSR+CSRに変更したのでお陀仏
+// 特定のユーザーのプロフィールページ CSR+ISR
 // フォロー欄に使用する情報を取得
 Route::get('/userIds', [FollowController::class, 'userIds'])->name('userIds');
