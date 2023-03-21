@@ -54,7 +54,7 @@ Route::get('/user/{id}', [UserResourceController::class, 'userData'])->name('use
 Route::prefix('/threads')
     ->group(function () {
         // 特定のthreadの情報 CSR+ISR
-        Route::get('/Ids', [ThreadController::class, 'getThreadIds'])->name('getThreadIds');
+        Route::get('/ids', [ThreadController::class, 'getThreadIds'])->name('getThreadIds');
         Route::get('/{id}', [ThreadController::class, 'getThread'])->name('getThread');
     });
 
