@@ -28,11 +28,11 @@ class LocalSeeder extends Seeder
             ->create();
 
         // threads100件作成
-        $threads = Thread::factory()->count(50)->recycle($users)
+        $threads = Thread::factory()->count(20)->recycle($users)
             ->has(ThreadImage::factory()->count(3)) // thread1つに対して3件画像作成
             ->has(ThreadComment::factory()->count(3)->recycle($users)) // thread1つに対してコメント3件作成
             ->has(
-                Item::factory()->count(2)->state(function (array $attributes, Thread $thread) use ($users) {
+                Item::factory()->count(rand(1, 2))->state(function (array $attributes, Thread $thread) use ($users) {
                     return [
                         'user_id' => $thread->user_id, // thread1つに対してitem2件作成 thread作成者のuser_id格納
                     ];
@@ -91,6 +91,5 @@ class LocalSeeder extends Seeder
                 $user->followings()->attach($followedUser);
             }
         }
-
     }
 }
