@@ -24,11 +24,11 @@ class LocalSeeder extends Seeder
     {
         // ユーザー20人作成
         $users = User::factory()
-            ->count(20)
+            ->count(15)
             ->create();
 
         // threads100件作成
-        $threads = Thread::factory()->count(20)->recycle($users)
+        $threads = Thread::factory()->count(10)->recycle($users)
             ->has(ThreadImage::factory()->count(3)) // thread1つに対して3件画像作成
             ->has(ThreadComment::factory()->count(3)->recycle($users)) // thread1つに対してコメント3件作成
             ->has(
@@ -85,7 +85,7 @@ class LocalSeeder extends Seeder
         // フォロワー/フォローの関係を作成する
         foreach ($users as $user) { // 作成したユーザー全員をまわす
             // ユーザーのフォロワーを作成する
-            $followCount = rand(5, 20);
+            $followCount = rand(5, 7);
             $usersForFollows = $users->random($followCount);
             foreach ($usersForFollows as $followedUser) {
                 $user->followings()->attach($followedUser);
