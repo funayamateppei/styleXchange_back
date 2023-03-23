@@ -56,6 +56,7 @@ Route::prefix('/threads')
         // 特定のthreadの情報 CSR+ISR
         Route::get('/ids', [ThreadController::class, 'getThreadIds'])->name('getThreadIds');
         Route::get('/{id}', [ThreadController::class, 'getThread'])->name('getThread');
+        Route::get('/comments/{id}', [ThreadController::class, 'getThreadComments'])->name('getThreadComments');
     });
 
 // 特定のユーザーのプロフィールページ CSR+ISR
