@@ -44,4 +44,26 @@ class ItemController extends Controller
         ];
         return response()->json($data);
     }
+
+    // いいね機能
+    public function postItemLikes(Request $request)
+    {
+        try {
+            $user_id = Auth::id();
+            $item_id = $request['id'];
+
+            $item = Item::findOrFail($item_id); // threadが存在するか確認
+
+            $is_like = $item->likedItems()->where('user_id', $user_id)->exists();
+
+            $is_like
+                ? $item->likedItems()->detach($user_id)  // $is_likeがtrue
+                : $item->likedItems()->attach($user_id); // $is_likeがtrue
+
+            return response()->noContent();
+        } catch (\Exception $e) {
+            Logger($e);
+            abort(404);
+        }
+    }
 }
