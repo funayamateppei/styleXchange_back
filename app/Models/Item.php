@@ -48,9 +48,9 @@ class Item extends Model
     }
 
     // items:categories 1:多
-    public function categories()
+    public function category()
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     // items:item_images 1:多

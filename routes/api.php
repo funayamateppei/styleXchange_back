@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserResourceController;
 use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\ExhibitController;
 use App\Http\Controllers\Api\ThreadController;
+use App\Http\Controllers\Api\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,28 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
 
         // 出品処理 threads $ thread_images & items & item_images 保存
         Route::post('/exhibit', [ExhibitController::class, 'exhibit'])->name('exhibit');
+
+        // thread 関連処理
+        Route::prefix('/threads')
+            ->group(function () {
+                // コメント機能
+                Route::post('/comments/{id}', [ThreadController::class, 'postThreadComments'])->name('postThreadComments');
+                // いいね機能
+                Route::post('/likes/{id}', [ThreadController::class, 'postThreadLikes'])->name('postThreadLikes');
+                // ブックマーク機能
+                Route::post('/bookmarks/{id}', [ThreadController::class, 'postThreadBookmarks'])->name('postThreadBookmarks');
+            });
+
+        // thread 関連処理
+        // Route::prefix('/items')
+        //     ->group(function () {
+        //         // コメント機能
+        //         Route::post('/comments/{id}', [ItemController::class, 'postItemComments'])->name('postItemComments');
+        //         // いいね機能
+        //         Route::post('/likes/{id}', [ItemController::class, 'postItemLikes'])->name('postItemLikes');
+        //         // ブックマーク機能
+        //         Route::post('/bookmarks/{id}', [ItemController::class, 'postItemBookmarks'])->name('postItemBookmarks');
+        //     });
     });
 
 // 出品ページで使うカテゴリの情報を返すエンドポイント
@@ -51,18 +74,20 @@ Route::get('/follows/{id}', [FollowController::class, 'getFollows'])->name('getF
 // 特定のユーザーのマイページ情報
 Route::get('/user/{id}', [UserResourceController::class, 'userData'])->name('userData');
 
+// 特定のthreadの情報 CSR+ISR
 Route::prefix('/threads')
     ->group(function () {
-        // 特定のthreadの情報 CSR+ISR
+        Route::get('/comments/{id}', [ThreadController::class, 'getThreadComments'])->name('getThreadComments');
         Route::get('/ids', [ThreadController::class, 'getThreadIds'])->name('getThreadIds');
         Route::get('/{id}', [ThreadController::class, 'getThread'])->name('getThread');
-        // コメント機能
-        Route::get('/comments/{id}', [ThreadController::class, 'getThreadComments'])->name('getThreadComments');
-        Route::post('/comments/{id}', [ThreadController::class, 'postThreadComments'])->name('postThreadComments');
-        // いいね機能
-        Route::post('/likes/{id}', [ThreadController::class, 'postThreadLikes'])->name('postThreadLikes');
-        // ブックマーク機能
-        Route::post('/bookmarks/{id}', [ThreadController::class, 'postThreadBookmarks'])->name('postThreadBookmarks');
+    });
+
+// 特定のitemsの情報 CSR+ISR
+Route::prefix('/items')
+    ->group(function () {
+        Route::get('/comments/{id}', [ItemController::class, 'getItemComments'])->name('getItemComments');
+        Route::get('/ids', [ItemController::class, 'getItemIds'])->name('getItemIds');
+        Route::get('/{id}', [ItemController::class, 'getItem'])->name('getItem');
     });
 
 // 特定のユーザーのプロフィールページ CSR+ISR
