@@ -59,4 +59,48 @@ class ThreadController extends Controller
         ThreadComment::create($comment);
         return response()->noContent();
     }
+
+    // いいね機能
+    public function postThreadLikes(Request $request)
+    {
+        try {
+            $user_id = Auth::id();
+            $thread_id = $request['id'];
+
+            $thread = Thread::findOrFail($thread_id); // threadが存在するか確認
+
+            $is_like = $thread->likedThreads()->where('user_id', $user_id)->exists();
+
+            $is_like
+                ? $thread->likedThreads()->detach($user_id)  // $is_likeがtrue
+                : $thread->likedThreads()->attach($user_id); // $is_likeがtrue
+
+            return response()->noContent();
+        } catch (\Exception $e) {
+            Logger($e);
+            abort(404);
+        }
+    }
+
+    // ブックマーク機能
+    public function postThreadBookmarks(Request $request)
+    {
+        try {
+            $user_id = Auth::id();
+            $thread_id = $request['id'];
+
+            $thread = Thread::findOrFail($thread_id); // threadが存在するか確認
+
+            $is_like = $thread->bookmarkedThreads()->where('user_id', $user_id)->exists();
+
+            $is_like
+                ? $thread->bookmarkedThreads()->detach($user_id)  // $is_likeがtrue
+                : $thread->bookmarkedThreads()->attach($user_id); // $is_likeがtrue
+
+            return response()->noContent();
+        } catch (\Exception $e) {
+            Logger($e);
+            abort(404);
+        }
+    }
 }
