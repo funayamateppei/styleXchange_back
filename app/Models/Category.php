@@ -20,8 +20,8 @@ class Category extends Model
     ];
 
     // categories:items 多:1
-    public function item()
+    public function items()
     {
-        return $this->belongsTo(Item::class);
+        return $this->hasMany(Item::class);
     }
 }
