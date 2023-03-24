@@ -57,6 +57,7 @@ Route::prefix('/threads')
         Route::get('/ids', [ThreadController::class, 'getThreadIds'])->name('getThreadIds');
         Route::get('/{id}', [ThreadController::class, 'getThread'])->name('getThread');
         Route::get('/comments/{id}', [ThreadController::class, 'getThreadComments'])->name('getThreadComments');
+        Route::post('/comments/{id}', [ThreadController::class, 'postThreadComments'])->name('postThreadComments');
     });
 
 // 特定のユーザーのプロフィールページ CSR+ISR
