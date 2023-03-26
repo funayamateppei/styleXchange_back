@@ -55,15 +55,13 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
             });
 
         // thread 関連処理
-        // Route::prefix('/items')
-        //     ->group(function () {
-        //         // コメント機能
-        //         Route::post('/comments/{id}', [ItemController::class, 'postItemComments'])->name('postItemComments');
-        //         // いいね機能
-        //         Route::post('/likes/{id}', [ItemController::class, 'postItemLikes'])->name('postItemLikes');
-        //         // ブックマーク機能
-        //         Route::post('/bookmarks/{id}', [ItemController::class, 'postItemBookmarks'])->name('postItemBookmarks');
-        //     });
+        Route::prefix('/items')
+            ->group(function () {
+                //         // コメント機能
+                //         Route::post('/comments/{id}', [ItemController::class, 'postItemComments'])->name('postItemComments');
+                // いいね機能
+                Route::post('/likes/{id}', [ItemController::class, 'postItemLikes'])->name('postItemLikes');
+            });
     });
 
 // 出品ページで使うカテゴリの情報を返すエンドポイント

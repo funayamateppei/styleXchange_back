@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Item;
 use App\Models\ItemComment;
+use App\Models\Category;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -26,6 +27,11 @@ class ItemController extends Controller
         $id = $request['id'];
         $data = Item::with(['user.items.itemImages', 'thread', 'itemImages', 'itemComments.user', 'likedItems', 'category'])
             ->find($id);
+        // 大分類のカテゴリーを取得
+        $category = $data->category;
+        $parentCategory = Category::where([['id', $category->parent], ['big_category', true]])
+            ->first();
+        $data->parent_category = $parentCategory;
         return response()->json($data);
     }
 
@@ -43,5 +49,27 @@ class ItemController extends Controller
             'commentData' => $commentData,
         ];
         return response()->json($data);
+    }
+
+    // いいね機能
+    public function postItemLikes(Request $request)
+    {
+        try {
+            $user_id = Auth::id();
+            $item_id = $request['id'];
+
+            $item = Item::findOrFail($item_id); // threadが存在するか確認
+
+            $is_like = $item->likedItems()->where('user_id', $user_id)->exists();
+
+            $is_like
+                ? $item->likedItems()->detach($user_id)  // $is_likeがtrue
+                : $item->likedItems()->attach($user_id); // $is_likeがtrue
+
+            return response()->noContent();
+        } catch (\Exception $e) {
+            Logger($e);
+            abort(404);
+        }
     }
 }
