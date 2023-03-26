@@ -51,6 +51,21 @@ class ItemController extends Controller
         return response()->json($data);
     }
 
+    // コメント機能
+    public function postItemComments(Request $request)
+    {
+        $id = $request['id'];
+        $data = $request->get('comment');
+        // Log::debug($data); // 確認用
+        $comment = [
+            'comment' => $data,
+            'item_id' => $id,
+            'user_id' => Auth::id(),
+        ];
+        ItemComment::create($comment);
+        return response()->noContent();
+    }
+
     // いいね機能
     public function postItemLikes(Request $request)
     {
