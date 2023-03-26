@@ -74,6 +74,7 @@ class ExhibitController extends Controller
                     'condition' => $item['condition'],
                     'days' => $item['days'],
                     'postage' => $item['postage'],
+                    'url' => $item['url'],
                 ];
                 $itemResponse = Item::create($itemData);
                 // Log::debug($itemResponse); // 確認用
