@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Item;
 use App\Models\ItemComment;
+use App\Models\Category;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -26,6 +27,11 @@ class ItemController extends Controller
         $id = $request['id'];
         $data = Item::with(['user.items.itemImages', 'thread', 'itemImages', 'itemComments.user', 'likedItems', 'category'])
             ->find($id);
+        // 大分類のカテゴリーを取得
+        $category = $data->category;
+        $parentCategory = Category::where([['id', $category->parent], ['big_category', true]])
+            ->first();
+        $data->parent_category = $parentCategory;
         return response()->json($data);
     }
 
