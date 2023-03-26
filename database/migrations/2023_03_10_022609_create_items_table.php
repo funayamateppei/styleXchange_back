@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('days'); // 発送までの日数(選択)
             $table->boolean('sale')->default(true); // 販売中or売切
             $table->boolean('postage'); // 送料込みor着払い
+            $table->string('url', 2500); // 商品URL
             $table->timestamps();
         });
     }

@@ -33,6 +33,7 @@ class Item extends Model
         'days',
         'sale',
         'postage',
+        'url',
     ];
 
     // items:users 多:1

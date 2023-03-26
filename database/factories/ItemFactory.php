@@ -29,11 +29,20 @@ class ItemFactory extends Factory
 
         $gender = fake()->boolean(50);
         $categories = Category::where('big_category', false)
-        ->where('gender', $gender ? '!=' : '=', 1)
-        ->get()
-        ->pluck('id')
-        ->toArray();
+            ->where('gender', $gender ? '!=' : '=', 1)
+            ->get()
+            ->pluck('id')
+            ->toArray();
         $category_id = fake()->randomElement($categories);
+
+        $url = [
+            'https://jp.mercari.com/item/m96115622053?utm_medium=share&source_location=share&utm_source=ios',
+            'https://jp.mercari.com/item/m40808130126?source_location=share&utm_source=ios&utm_medium=share',
+            'https://jp.mercari.com/item/m34699151604?source_location=share&utm_source=ios&utm_medium=share',
+            'https://jp.mercari.com/item/m19466101735?utm_source=ios&source_location=share&utm_medium=share',
+            'https://jp.mercari.com/item/m37815542830?source_location=share&utm_source=ios&utm_medium=share',
+        ];
+        $randomUrl = $url[array_rand($url)];
 
         return [
             'thread_id' => \App\Models\Thread::factory(),
@@ -49,6 +58,7 @@ class ItemFactory extends Factory
             'days' => $randomDays,
             'sale' => fake()->boolean(90),
             'postage' => fake()->boolean(80),
+            'url' => $randomUrl,
         ];
     }
 }
