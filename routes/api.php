@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\ExhibitController;
 use App\Http\Controllers\Api\ThreadController;
 use App\Http\Controllers\Api\ItemController;
+use App\Http\Controllers\Api\InfinityScrollController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +34,11 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
         Route::prefix('/my')
             ->name('my.')
             ->group(function () {
-                // 全てのユーザーのデータを全て返す
+                // AuthUserとthreadとitemをまとめて返す ISR+CSR
                 Route::get('/allData', [MyResourceController::class, 'allData'])->name('allData');
-                // AuthUserとthreadとitemをまとめて返す
                 Route::get('/data', [MyResourceController::class, 'data'])->name('data');
             });
+        // 特定のユーザーのページでフォローしているかしていないかを判断する処理
         Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');
 
         // 出品処理 threads $ thread_images & items & item_images 保存
@@ -64,12 +65,20 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
             });
     });
 
-// 出品ページで使うカテゴリの情報を返すエンドポイント
+// Homeページでの無限スクロールのエンドポイント SSR+CSR
+Route::get('/home', [InfinityScrollController::class, 'getHomeThreads'])->name('getHomeThreads');
+Route::get('/home/mens', [InfinityScrollController::class, 'getHomeThreads'])->name('getHomeThreads');
+Route::get('/home/ladies', [InfinityScrollController::class, 'getHomeThreads'])->name('getHomeThreads');
+
+// フォロー中の人の投稿だけがでる無限スクロールのエンドポイント SSR+CSR
+Route::get('/timeline', [InfinityScrollController::class, 'getTimelineThreads'])->name('getTimelineThreads');
+
+// 出品ページで使うカテゴリの情報を返すエンドポイント ISR
 Route::get('/categories', [ExhibitController::class, 'categories'])->name('categories');
 
-// フォロー欄 特定のユーザーとログインしているユーザーがフォロー済かの情報取得
+// フォロー欄 特定のユーザーとログインしているユーザーがフォロー済かの情報取得 SSR+CSR
 Route::get('/follows/{id}', [FollowController::class, 'getFollows'])->name('getFollows');
-// 特定のユーザーのマイページ情報
+// 特定のユーザーのマイページ情報 ISR+CSR
 Route::get('/user/{id}', [UserResourceController::class, 'userData'])->name('userData');
 
 // 特定のthreadの情報 CSR+ISR
@@ -88,6 +97,5 @@ Route::prefix('/items')
         Route::get('/{id}', [ItemController::class, 'getItem'])->name('getItem');
     });
 
-// 特定のユーザーのプロフィールページ CSR+ISR
-// フォロー欄に使用する情報を取得
+// 特定のユーザーのプロフィールページ フォロー欄に使用する情報を取得 CSR+ISR
 Route::get('/userIds', [FollowController::class, 'userIds'])->name('userIds');
