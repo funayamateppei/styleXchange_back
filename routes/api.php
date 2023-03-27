@@ -68,8 +68,8 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
     });
 
 // Homeページでの無限スクロールのエンドポイント SSR+CSR
-Route::get('/home', [InfinityScrollController::class, 'getHomeMensThreads'])->name('getHomeThreads');
-Route::get('/home/mens', [InfinityScrollController::class, 'getHomeThreads'])->name('getHomeThreads');
+Route::get('/home', [InfinityScrollController::class, 'getHomeThreads'])->name('getHomeThreads');
+Route::get('/home/mens', [InfinityScrollController::class, 'getHomeMensThreads'])->name('getHomeThreads');
 Route::get('/home/ladies', [InfinityScrollController::class, 'getHomeLadiesThreads'])->name('getHomeThreads');
 
 // フォロー中の人の投稿だけがでる無限スクロールのエンドポイント SSR+CSR

@@ -16,7 +16,10 @@ class InfinityScrollController extends Controller
     // Home画面 無限スクロール(MIX) CSR
     public function getHomeThreads()
     {
-        $data = Thread::with(['threadImages', 'user', 'items'])->orderBy('updated_at', 'desc')->paginate(8);
+        $data = Thread::with(['threadImages', 'user', 'items'])
+            ->withCount(['bookmarkedThreads', 'likedThreads'])
+            ->orderBy('updated_at', 'desc')
+            ->paginate(8);
         return response()->json($data);
     }
 
@@ -25,7 +28,11 @@ class InfinityScrollController extends Controller
     {
         $data = Thread::whereHas('items', function ($query) {
             $query->where('gender', 1);
-        })->with(['threadImages', 'user', 'items'])->orderBy('updated_at', 'desc')->paginate(8);
+        })
+            ->with(['threadImages', 'user', 'items'])
+            ->withCount(['bookmarkedThreads', 'likedThreads'])
+            ->orderBy('updated_at', 'desc')
+            ->paginate(8);
         return response()->json($data);
     }
 
@@ -34,7 +41,11 @@ class InfinityScrollController extends Controller
     {
         $data = Thread::whereHas('items', function ($query) {
             $query->where('gender', 0);
-        })->with(['threadImages', 'user', 'items'])->orderBy('updated_at', 'desc')->paginate(8);
+        })
+            ->with(['threadImages', 'user', 'items'])
+            ->withCount(['bookmarkedThreads', 'likedThreads'])
+            ->orderBy('updated_at', 'desc')
+            ->paginate(8);
         return response()->json($data);
     }
 
