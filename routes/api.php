@@ -40,6 +40,8 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
             });
         // 特定のユーザーのページでフォローしているかしていないかを判断する処理
         Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');
+        // フォロー/アンフォロー機能
+        Route::post('/follows/{id}', [FollowController::class, 'follow'])->name('follow');
 
         // 出品処理 threads $ thread_images & items & item_images 保存
         Route::post('/exhibit', [ExhibitController::class, 'exhibit'])->name('exhibit');
