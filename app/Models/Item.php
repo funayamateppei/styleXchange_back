@@ -73,7 +73,7 @@ class Item extends Model
         ->withTimestamps();
     }
 
-    // items:users 多:多 いいね機能
+    // items:users 多:多 購入者機能
     public function purchasedItems()
     {
         return $this->belongsToMany(User::class, 'purchasers', 'item_id', 'user_id')
