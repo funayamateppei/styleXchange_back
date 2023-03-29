@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
-
 use App\Models\User;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MyResourceController extends Controller
 {
@@ -38,5 +39,11 @@ class MyResourceController extends Controller
         $user = $request->user();
         $data = User::with('followings')->find($user->id);
         return response()->json($data);
+    }
+
+    public function updateData(Request $request)
+    {
+        $data = $request->all();
+        Log::debug($data);
     }
 }
