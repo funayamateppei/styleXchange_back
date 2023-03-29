@@ -37,7 +37,7 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
                 // AuthUserとthreadとitemをまとめて返す ISR+CSR
                 Route::get('/allData', [MyResourceController::class, 'allData'])->name('allData');
                 Route::get('/data', [MyResourceController::class, 'data'])->name('data');
-                Route::put('/data', [MyResourceController::class, 'updateData'])->name('updateData');
+                Route::patch('/data', [MyResourceController::class, 'updateData'])->name('updateData');
             });
         // 特定のユーザーのページでフォローしているかしていないかを判断する処理
         Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');
