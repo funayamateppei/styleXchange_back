@@ -33,7 +33,7 @@ class ThreadController extends Controller
     public function getThreadComments(Request $request)
     {
         $id = $request['id'];
-        $threadData = Thread::find($id);
+        $threadData = Thread::with('user')->find($id);
         $commentData = ThreadComment::with('user')
             ->where('thread_id', $id)
             ->orderBy('created_at', 'asc')

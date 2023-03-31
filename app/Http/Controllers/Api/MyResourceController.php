@@ -45,6 +45,7 @@ class MyResourceController extends Controller
         return response()->json($data);
     }
 
+    // プロフィール編集処理
     public function updateData(Request $request)
     {
         DB::beginTransaction(); // トランザクションを開始
@@ -56,7 +57,6 @@ class MyResourceController extends Controller
                 $store = $file->storeAs('icon_images', $filename, 'public');
                 $icon_path = '/storage/' . $store;
                 $data['icon_path'] = $icon_path;
-
                 // 以前のアイコン画像を削除
                 $previous_icon_path = Auth::user()->icon_path;
                 if ($previous_icon_path) {
@@ -91,7 +91,6 @@ class MyResourceController extends Controller
             // Log::debug($data);
             Auth::user()->update($data);
             DB::commit();
-
             return response()->noContent();
         } catch (\Exception $e) {
             // エラー処理

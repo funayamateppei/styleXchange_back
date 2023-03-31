@@ -73,6 +73,12 @@ Route::get('/home', [InfinityScrollController::class, 'getHomeThreads'])->name('
 Route::get('/home/mens', [InfinityScrollController::class, 'getHomeMensThreads'])->name('getHomeThreads');
 Route::get('/home/ladies', [InfinityScrollController::class, 'getHomeLadiesThreads'])->name('getHomeThreads');
 
+// 検索 無限スクロール
+Route::get('/search/thread/category', [InfinityScrollController::class, 'searchThreadByCategory'])->name('searchThreadByCategory');
+Route::get('/search/thread/word', [InfinityScrollController::class, 'searchThreadByWord'])->name('searchThreadByWord');
+Route::get('/search/item/category', [InfinityScrollController::class, 'searchItemByCategory'])->name('searchItemByCategory');
+Route::get('/search/item/word', [InfinityScrollController::class, 'searchItemByWord'])->name('searchItemByWord');
+
 // フォロー中の人の投稿だけがでる無限スクロールのエンドポイント SSR+CSR
 Route::get('/timeline', [InfinityScrollController::class, 'getTimelineThreads'])->name('getTimelineThreads');
 
