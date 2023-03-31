@@ -25,7 +25,7 @@ class ItemController extends Controller
     public function getItem(Request $request)
     {
         $id = $request['id'];
-        $data = Item::with(['user.items.itemImages', 'thread', 'itemImages', 'itemComments.user', 'likedItems', 'category'])
+        $data = Item::with(['user.items.itemImages', 'thread.threadImages', 'itemImages', 'itemComments.user', 'likedItems', 'category'])
             ->find($id);
         // 大分類のカテゴリーを取得
         $category = $data->category;
