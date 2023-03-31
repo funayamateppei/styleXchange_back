@@ -161,4 +161,17 @@ class InfinityScrollController extends Controller
             ->paginate(8);
         return response()->json($data);
     }
+
+    // 検索結果 (itemフリーワード) 無限スクロール CSR
+    public function searchItemByWord(Request $request)
+    {
+        $word = $request['word'];
+        $data = Item::where('title', 'LIKE', '%' . $word . '%')
+            ->orWhere('text', 'LIKE', '%' . $word . '%')
+            ->with(['itemImages', 'user'])
+            ->withCount('likedItems')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(8);
+        return response()->json($data);
+    }
 }
