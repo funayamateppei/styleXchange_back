@@ -108,39 +108,82 @@ class InfinityScrollController extends Controller
     // 検索結果 (threadカテゴリ) 無限スクロール CSR
     public function searchThreadByCategory(Request $request)
     {
-        $gender = $request['gender'];
-        $category_id = $request['category'];
-        $data = Thread::whereHas('items', function ($query) use ($gender, $category_id) {
-            if ($gender == 1) {
-                $genderBoolean = true;
-            } else if ($gender == 0) {
-                $genderBoolean = false;
-            }
-            $query->where('gender', $genderBoolean)->where('category_id', $category_id);
-        })
-            ->with(['threadImages', 'user'])
-            ->withCount(['likedThreads', 'bookmarkedThreads'])
-            ->orderBy('updated_at', 'desc')
-            ->paginate(8);
+        $today = Carbon::today(); // 今日の日付を取得
+        $oneMonthAgo = $today->subMonth(); // 1ヶ月前の日付を取得
+        $sort = $request['sort'];
+        if ($sort === 'like') {
+            $gender = $request['gender'];
+            $category_id = $request['category'];
+            $data = Thread::whereHas('items', function ($query) use ($gender, $category_id) {
+                if ($gender == 1) {
+                    $genderBoolean = true;
+                } else if ($gender == 0) {
+                    $genderBoolean = false;
+                }
+                $query->where('gender', $genderBoolean)->where('category_id', $category_id);
+            })
+                ->with(['threadImages', 'user'])
+                ->withCount(['likedThreads', 'bookmarkedThreads'])
+                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
+                ->orderBy('liked_threads_count', 'desc')
+                ->orderBy('updated_at', 'desc')
+                ->paginate(8);
+        } else if ($sort === 'new') {
+            $gender = $request['gender'];
+            $category_id = $request['category'];
+            $data = Thread::whereHas('items', function ($query) use ($gender, $category_id) {
+                if ($gender == 1) {
+                    $genderBoolean = true;
+                } else if ($gender == 0) {
+                    $genderBoolean = false;
+                }
+                $query->where('gender', $genderBoolean)->where('category_id', $category_id);
+            })
+                ->with(['threadImages', 'user'])
+                ->withCount(['likedThreads', 'bookmarkedThreads'])
+                ->orderBy('updated_at', 'desc')
+                ->paginate(8);
+        }
         return response()->json($data);
     }
 
     // 検索結果 (itemカテゴリ) 無限スクロール CSR
     public function searchItemByCategory(Request $request)
     {
-        $gender = $request['gender'];
-        $category_id = $request['category'];
-        if ($gender == 1) {
-            $genderBoolean = true;
-        } else {
-            $genderBoolean = false;
+        $today = Carbon::today(); // 今日の日付を取得
+        $oneMonthAgo = $today->subMonth(); // 1ヶ月前の日付を取得
+        $sort = $request['sort'];
+        if ($sort === 'like') {
+            $gender = $request['gender'];
+            $category_id = $request['category'];
+            if ($gender == 1) {
+                $genderBoolean = true;
+            } else {
+                $genderBoolean = false;
+            }
+            $data = Item::where('gender', $genderBoolean)
+                ->where('category_id', $category_id)
+                ->with(['itemImages', 'user'])
+                ->withCount('likedItems')
+                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
+                ->orderBy('liked_items_count', 'desc')
+                ->orderBy('updated_at', 'desc')
+                ->paginate(8);
+        } else if ($sort === 'new') {
+            $gender = $request['gender'];
+            $category_id = $request['category'];
+            if ($gender == 1) {
+                $genderBoolean = true;
+            } else {
+                $genderBoolean = false;
+            }
+            $data = Item::where('gender', $genderBoolean)
+                ->where('category_id', $category_id)
+                ->with(['itemImages', 'user'])
+                ->withCount('likedItems')
+                ->orderBy('updated_at', 'desc')
+                ->paginate(8);
         }
-        $data = Item::where('gender', $genderBoolean)
-            ->where('category_id', $category_id)
-            ->with(['itemImages', 'user'])
-            ->withCount('likedItems')
-            ->orderBy('updated_at', 'desc')
-            ->paginate(8);
         return response()->json($data);
     }
 
@@ -148,30 +191,65 @@ class InfinityScrollController extends Controller
     // 検索結果 (threadフリーワード) 無限スクロール CSR
     public function searchThreadByWord(Request $request)
     {
-        $word = $request['word'];
-        $data = Thread::whereHas('items', function ($query) use ($word) {
-            $query->where(function ($subQuery) use ($word) {
-                $subQuery->where('title', 'LIKE', '%' . $word . '%')
-                    ->orWhere('text', 'LIKE', '%' . $word . '%');
-            });
-        })
-            ->with(['threadImages', 'user'])
-            ->withCount(['likedThreads', 'bookmarkedThreads'])
-            ->orderBy('updated_at', 'desc')
-            ->paginate(8);
+        $today = Carbon::today(); // 今日の日付を取得
+        $oneMonthAgo = $today->subMonth(); // 1ヶ月前の日付を取得
+        $sort = $request['sort'];
+        if ($sort === 'like') {
+            $word = $request['word'];
+            $data = Thread::whereHas('items', function ($query) use ($word) {
+                $query->where(function ($subQuery) use ($word) {
+                    $subQuery->where('title', 'LIKE', '%' . $word . '%')
+                        ->orWhere('text', 'LIKE', '%' . $word . '%');
+                });
+            })
+                ->with(['threadImages', 'user'])
+                ->withCount(['likedThreads', 'bookmarkedThreads'])
+                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
+                ->orderBy('liked_threads_count', 'desc')
+                ->orderBy('updated_at', 'desc')
+                ->paginate(8);
+        } else if ($sort === 'new') {
+            $word = $request['word'];
+            $data = Thread::whereHas('items', function ($query) use ($word) {
+                $query->where(function ($subQuery) use ($word) {
+                    $subQuery->where('title', 'LIKE', '%' . $word . '%')
+                        ->orWhere('text', 'LIKE', '%' . $word . '%');
+                });
+            })
+                ->with(['threadImages', 'user'])
+                ->withCount(['likedThreads', 'bookmarkedThreads'])
+                ->orderBy('updated_at', 'desc')
+                ->paginate(8);
+        }
+
         return response()->json($data);
     }
 
     // 検索結果 (itemフリーワード) 無限スクロール CSR
     public function searchItemByWord(Request $request)
     {
-        $word = $request['word'];
-        $data = Item::where('title', 'LIKE', '%' . $word . '%')
-            ->orWhere('text', 'LIKE', '%' . $word . '%')
-            ->with(['itemImages', 'user'])
-            ->withCount('likedItems')
-            ->orderBy('updated_at', 'desc')
-            ->paginate(8);
+        $today = Carbon::today(); // 今日の日付を取得
+        $oneMonthAgo = $today->subMonth(); // 1ヶ月前の日付を取得
+        $sort = $request['sort'];
+        if ($sort === 'like') {
+            $word = $request['word'];
+            $data = Item::where('title', 'LIKE', '%' . $word . '%')
+                ->orWhere('text', 'LIKE', '%' . $word . '%')
+                ->with(['itemImages', 'user'])
+                ->withCount('likedItems')
+                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
+                ->orderBy('liked_items_count', 'desc')
+                ->orderBy('updated_at', 'desc')
+                ->paginate(8);
+        } else if ($sort === 'new') {
+            $word = $request['word'];
+            $data = Item::where('title', 'LIKE', '%' . $word . '%')
+                ->orWhere('text', 'LIKE', '%' . $word . '%')
+                ->with(['itemImages', 'user'])
+                ->withCount('likedItems')
+                ->orderBy('updated_at', 'desc')
+                ->paginate(8);
+        }
         return response()->json($data);
     }
 }
