@@ -38,6 +38,9 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
                 Route::get('/allData', [MyResourceController::class, 'allData'])->name('allData');
                 Route::get('/data', [MyResourceController::class, 'data'])->name('data');
                 Route::patch('/data', [MyResourceController::class, 'updateData'])->name('updateData');
+                // いいね一覧 ブックマーク一覧
+                Route::get('/likes', [MyResourceController::class, 'likesData'])->name('likesData');
+                Route::get('/bookmarks', [MyResourceController::class, 'bookmarksData'])->name('bookmarksData');
             });
         // 特定のユーザーのページでフォローしているかしていないかを判断する処理
         Route::get('/isFollowing', [MyResourceController::class, 'isFollowing'])->name('isFollowing');

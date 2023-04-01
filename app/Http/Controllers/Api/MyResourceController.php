@@ -98,4 +98,28 @@ class MyResourceController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    // いいね一覧
+    public function likesData(Request $request)
+    {
+        $id = Auth::id();
+        $user = User::where('id', $id)->first();
+        $isThreadSelect = $request['isThreadSelect'];
+        Log::debug($isThreadSelect);
+        if ($isThreadSelect == 1) {
+            $data = $user->likedThreadBy()->with('threadImages')->orderBy('created_at', 'desc')->paginate(9);
+        } else if ($isThreadSelect == 0) {
+            $data = $user->likedItemBy()->with('itemImages')->orderBy('created_at', 'desc')->paginate(9);
+        }
+        return response()->json($data);
+    }
+
+    // ブックマーク一覧
+    public function bookmarksData()
+    {
+        $id = Auth::id();
+        $data = User::where('id', $id)->first();
+        $items = $data->bookmarkedBy()->with('threadImages')->orderBy('created_at', 'desc')->paginate(9);
+        return response()->json($items);
+    }
 }
