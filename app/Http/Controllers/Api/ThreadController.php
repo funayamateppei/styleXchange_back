@@ -144,6 +144,7 @@ class ThreadController extends Controller
             $data['archive'] = $request->input('archive');
             $threadUpdateResponse = Thread::find($thread_id)->update($data);
             DB::commit();
+            return response()->noContent();
         } catch (\Exception $e) {
             // エラー処理
             Log::debug($e);
@@ -155,6 +156,8 @@ class ThreadController extends Controller
     // 削除処理
     public function deleteThread(Request $request)
     {
-        $thread_id = $request['id'];
+        $thread_id = $request->route('id');
+        $threadDeleteResponse = Thread::find($thread_id)->delete();
+        return response()->noContent();
     }
 }
