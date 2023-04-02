@@ -59,6 +59,10 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
                 Route::post('/likes/{id}', [ThreadController::class, 'postThreadLikes'])->name('postThreadLikes');
                 // ブックマーク機能
                 Route::post('/bookmarks/{id}', [ThreadController::class, 'postThreadBookmarks'])->name('postThreadBookmarks');
+                // 更新
+                Route::patch('/{id}', [ThreadController::class, 'updateThread'])->name('updateThread');
+                // 削除
+                Route::delete('/{id}', [ThreadController::class, 'deleteThread'])->name('deleteThread');
             });
 
         // thread 関連処理
