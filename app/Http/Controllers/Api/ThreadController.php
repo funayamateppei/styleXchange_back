@@ -147,7 +147,6 @@ class ThreadController extends Controller
             return response()->noContent();
         } catch (\Exception $e) {
             // エラー処理
-            Log::debug($e);
             DB::rollback();
             return response()->json(['error' => $e->getMessage()], 500);
         }

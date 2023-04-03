@@ -117,21 +117,20 @@ class ItemController extends Controller
                     $store = $image->storeAs('item_images', $filename, 'public');
                     $path = '/storage/' . $store;
                     $threadImageData = [
-                        'thread_id' => $item_id,
+                        'item_id' => $item_id,
                         'path' => $path,
                         'original_file_name' => $filename,
                     ];
-                    $threadImagesResponse = ItemImage::create($threadImageData);
+                    $itemImagesResponse = ItemImage::create($threadImageData);
                 }
             }
             // threadを更新する処理
             $data = $request->input('item');
-            $threadUpdateResponse = Item::find($item_id)->update($data);
+            $itemUpdateResponse = Item::find($item_id)->update($data);
             DB::commit();
             return response()->noContent();
         } catch (\Exception $e) {
             // エラー処理
-            Log::debug($e);
             DB::rollback();
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -140,6 +139,8 @@ class ItemController extends Controller
     // 削除処理
     public function deleteItem(Request $request)
     {
-        Log::debug($request['id']);
+        $item_id = $request->route('id');
+        $itemDeleteResponse = Item::find($item_id)->delete();
+        return response()->noContent();
     }
 }
