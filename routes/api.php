@@ -72,6 +72,10 @@ Route::middleware(['auth:sanctum']) // ログインしていないと使えな�
                 Route::post('/comments/{id}', [ItemController::class, 'postItemComments'])->name('postItemComments');
                 // いいね機能
                 Route::post('/likes/{id}', [ItemController::class, 'postItemLikes'])->name('postItemLikes');
+                // 更新
+                Route::patch('/{id}', [ItemController::class, 'updateItem'])->name('updateItem');
+                // 削除
+                Route::delete('/{id}', [ItemController::class, 'deleteItem'])->name('deleteItem');
             });
     });
 

@@ -87,4 +87,16 @@ class ItemController extends Controller
             abort(404);
         }
     }
+
+    // 更新処理
+    public function updateItem(Request $request)
+    {
+        Log::debug($request->all());
+    }
+
+    // 削除処理
+    public function deleteItem(Request $request)
+    {
+        Log::debug($request['id']);
+    }
 }
