@@ -35,6 +35,22 @@ class ItemFactory extends Factory
             ->toArray();
         $category_id = fake()->randomElement($categories);
 
+        $colors = [
+            'white',
+            'black',
+            'gray',
+            'brown',
+            'beige',
+            'green',
+            'blue',
+            'purple',
+            'yellow',
+            'pink',
+            'red',
+            'orange',
+        ];
+        $color = $colors[array_rand($colors)];
+
         $url = [
             'https://jp.mercari.com/item/m96115622053?utm_medium=share&source_location=share&utm_source=ios',
             'https://jp.mercari.com/item/m40808130126?source_location=share&utm_source=ios&utm_medium=share',
@@ -52,7 +68,7 @@ class ItemFactory extends Factory
             'price' => fake()->numberBetween(300, 80000),
             'gender' => $gender,
             'category_id' => $category_id,
-            'color' => fake()->colorName(),
+            'color' => $color,
             'size' => $randomSize,
             'condition' => $randomCondition,
             'days' => $randomDays,
