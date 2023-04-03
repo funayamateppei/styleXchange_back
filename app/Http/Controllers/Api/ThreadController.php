@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 use App\Models\Thread;
 use App\Models\ThreadComment;
-
+use App\Models\ThreadImage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class ThreadController extends Controller
@@ -102,5 +104,59 @@ class ThreadController extends Controller
             Logger($e);
             abort(404);
         }
+    }
+
+    // 更新処理
+    public function updateThread(Request $request)
+    {
+        DB::beginTransaction(); // トランザクションを開始
+        try {
+            $thread_id = $request->route('id');
+            // thread_imagesを削除する処理
+            if ($request->input('deletedImageIds')) {
+                $delete_thread_image_id = $request->input('deletedImageIds');
+                foreach ($delete_thread_image_id as $id) {
+                    $threadImage = ThreadImage::find($id);
+                    $originalFileName = $threadImage->original_file_name;
+                    $threadImage->delete();
+                    if (File::exists(storage_path('app/public/' . 'thread_images/' . $originalFileName))) {
+                        $delete = File::delete(storage_path('app/public/' . 'thread_images/' . $originalFileName));
+                        Log::debug($delete);
+                    }
+                }
+            }
+            // thread_imagesを追加する処理
+            if ($request->file('newImages')) {
+                foreach ($request->file('newImages') as $image) {
+                    $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $store = $image->storeAs('thread_images', $filename, 'public');
+                    $path = '/storage/' . $store;
+                    $threadImageData = [
+                        'thread_id' => $thread_id,
+                        'path' => $path,
+                        'original_file_name' => $filename,
+                    ];
+                    $threadImagesResponse = ThreadImage::create($threadImageData);
+                }
+            }
+            // threadを更新する処理
+            $data['text'] = $request->input('text');
+            $data['archive'] = $request->input('archive');
+            $threadUpdateResponse = Thread::find($thread_id)->update($data);
+            DB::commit();
+            return response()->noContent();
+        } catch (\Exception $e) {
+            // エラー処理
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    // 削除処理
+    public function deleteThread(Request $request)
+    {
+        $thread_id = $request->route('id');
+        $threadDeleteResponse = Thread::find($thread_id)->delete();
+        return response()->noContent();
     }
 }
