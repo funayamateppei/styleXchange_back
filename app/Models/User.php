@@ -27,7 +27,7 @@ class User extends Authenticatable
         'password',
         'text',
         'icon_path',
-        'postcode',
+        'post_code',
         'address',
         'height',
         'google_id',

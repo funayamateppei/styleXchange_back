@@ -80,7 +80,7 @@ class MyResourceController extends Controller
                 $data['text'] = $request->input('text');
             }
             if ($request->input('postcode')) {
-                $data['postcode'] = $request->input('postcode');
+                $data['post_code'] = $request->input('postcode');
             }
             if ($request->input('address')) {
                 $data['address'] = $request->input('address');
@@ -94,6 +94,7 @@ class MyResourceController extends Controller
             return response()->noContent();
         } catch (\Exception $e) {
             // エラー処理
+            Log::debug($e);
             DB::rollback();
             return response()->json(['error' => $e->getMessage()], 500);
         }
