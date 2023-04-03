@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Item;
+use App\Models\ItemImage;
 use App\Models\ItemComment;
 use App\Models\Category;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class ItemController extends Controller
@@ -91,7 +94,47 @@ class ItemController extends Controller
     // 更新処理
     public function updateItem(Request $request)
     {
-        Log::debug($request->all());
+        DB::beginTransaction(); // トランザクションを開始
+        try {
+            $item_id = $request->route('id');
+            // thread_imagesを削除する処理
+            if ($request->input('deletedImageIds')) {
+                $delete_item_image_id = $request->input('deletedImageIds');
+                foreach ($delete_item_image_id as $id) {
+                    $itemImage = ItemImage::find($id);
+                    $originalFileName = $itemImage->original_file_name;
+                    $itemImage->delete();
+                    if (File::exists(storage_path('app/public/' . 'item_images/' . $originalFileName))) {
+                        $delete = File::delete(storage_path('app/public/' . 'item_images/' . $originalFileName));
+                        Log::debug($delete);
+                    }
+                }
+            }
+            // thread_imagesを追加する処理
+            if ($request->file('newImages')) {
+                foreach ($request->file('newImages') as $image) {
+                    $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+                    $store = $image->storeAs('item_images', $filename, 'public');
+                    $path = '/storage/' . $store;
+                    $threadImageData = [
+                        'thread_id' => $item_id,
+                        'path' => $path,
+                        'original_file_name' => $filename,
+                    ];
+                    $threadImagesResponse = ItemImage::create($threadImageData);
+                }
+            }
+            // threadを更新する処理
+            $data = $request->input('item');
+            $threadUpdateResponse = Item::find($item_id)->update($data);
+            DB::commit();
+            return response()->noContent();
+        } catch (\Exception $e) {
+            // エラー処理
+            Log::debug($e);
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     // 削除処理
