@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\ItemImage;
 use App\Models\ItemComment;
 use App\Models\Category;
+use App\Models\Thread;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -140,7 +141,22 @@ class ItemController extends Controller
     public function deleteItem(Request $request)
     {
         $item_id = $request->route('id');
-        $itemDeleteResponse = Item::find($item_id)->delete();
-        return response()->noContent();
+        $item = Item::find($item_id);
+        $thread_id = $item->thread_id;
+        DB::beginTransaction();
+        try {
+            $item->delete();
+            // スレッドに属するアイテム数をカウント
+            $item_count = DB::table('items')->where('thread_id', $thread_id)->count();
+            // アイテム数が0の場合はスレッドを削除
+            if ($item_count === 0) {
+                DB::table('threads')->where('id', $thread_id)->delete();
+            }
+            DB::commit();
+            return response()->noContent();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->serverError();
+        }
     }
 }
