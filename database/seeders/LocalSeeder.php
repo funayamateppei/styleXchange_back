@@ -86,7 +86,9 @@ class LocalSeeder extends Seeder
         foreach ($users as $user) { // 作成したユーザー全員をまわす
             // ユーザーのフォロワーを作成する
             $followCount = rand(5, 12);
-            $usersForFollows = $users->random($followCount);
+            $usersForFollows = $users->random($followCount)->reject(function ($followedUser) use ($user) {
+                return $followedUser->id == $user->id; // 自分をフォローしようとした時は除外する
+            });
             foreach ($usersForFollows as $followedUser) {
                 $user->followings()->attach($followedUser);
             }
