@@ -18,12 +18,32 @@ class ThreadImageFactory extends Factory
      */
     public function definition()
     {
-        $filename = fake()->file('public/thread_images', 'public/storage/thread_images', false);
-        $path = "/storage/thread_images/$filename";
+        // $gender = $this->state(function (array $attributes) {
+        //     return $attributes['gender'];
+        // });
+        // $filename = $gender === true
+        //     ? fake()->file('public/thread_man_image', 'public/storage/thread_images', false)
+        //     : fake()->file('public/thread_woman_image', 'public/storage/thread_images', false);
+        // $path = "/storage/thread_images/$filename";
+        // return [
+        //     'thread_id' => \App\Models\Thread::factory(),
+        //     'path' => $path,
+        //     'original_file_name' => $filename,
+        // ];
         return [
             'thread_id' => \App\Models\Thread::factory(),
-            'path' => $path,
-            'original_file_name' => $filename,
+            'path' => function (array $attributes) {
+                $thread = Thread::find($attributes['thread_id']);
+                $gender = $thread ? $thread->gender : false;
+                $filename = $gender
+                    ? fake()->file('public/thread_man_image', 'public/storage/thread_images', false)
+                    : fake()->file('public/thread_woman_image', 'public/storage/thread_images', false);
+                return "/storage/thread_images/$filename";
+            },
+            'original_file_name' => function (array $attributes) {
+                $filename = basename($attributes['path']);
+                return $filename;
+            },
         ];
     }
 }

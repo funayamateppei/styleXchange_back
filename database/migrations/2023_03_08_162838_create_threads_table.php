@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('text', 400)->nullable();
             $table->boolean('archive')->default(true);
+            $table->boolean('gender')->nullable();
             $table->timestamps();
         });
     }

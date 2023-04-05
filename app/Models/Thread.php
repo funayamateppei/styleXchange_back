@@ -22,6 +22,7 @@ class Thread extends Model
         'user_id',
         'text',
         'archive',
+        'gender',
     ];
 
     // threads:users 多:1
