@@ -23,6 +23,7 @@ class ThreadFactory extends Factory
             'user_id' => \App\Models\User::factory(),
             'text' => fake()->realText(150),
             'archive' => fake()->boolean(90),
+            'gender' => fake()->boolean(50),
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
         ];
