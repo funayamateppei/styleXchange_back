@@ -19,11 +19,12 @@ class ThreadFactory extends Factory
     {
         $createdAt = Carbon::now()->subDays(rand(1, 30))->subHours(rand(1, 24))->subMinutes(rand(1, 60));
         $updatedAt = $createdAt->copy()->addDays(rand(1, 30))->addHours(rand(1, 24))->addMinutes(rand(1, 60));
+        $gender = fake()->boolean(50);
         return [
             'user_id' => \App\Models\User::factory(),
             'text' => fake()->realText(150),
             'archive' => fake()->boolean(90),
-            'gender' => fake()->boolean(50),
+            'gender' => $gender,
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,
         ];

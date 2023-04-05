@@ -29,7 +29,9 @@ class ItemFactory extends Factory
         $days = ['1~2日で発送', '2~3日で発送', '4~7日で発送'];
         $randomDays = $days[array_rand($days)];
 
-        $gender = fake()->boolean(50);
+        $gender = $this->state(function (array $attributes) {
+            return $attributes['gender'];
+        });
         $categories = Category::where('big_category', false)
             ->where('gender', $gender ? '!=' : '=', 1)
             ->get()
