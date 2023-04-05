@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 use App\Models\Category;
 
+use Illuminate\Support\Carbon;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Item>
  */
@@ -60,6 +62,9 @@ class ItemFactory extends Factory
         ];
         $randomUrl = $url[array_rand($url)];
 
+        $createdAt = Carbon::now()->subDays(rand(1, 30))->subHours(rand(1, 24))->subMinutes(rand(1, 60));
+        $updatedAt = $createdAt->copy()->addDays(rand(1, 30))->addHours(rand(1, 24))->addMinutes(rand(1, 60));
+
         return [
             'thread_id' => \App\Models\Thread::factory(),
             'user_id' => \App\Models\User::factory(),
@@ -75,6 +80,8 @@ class ItemFactory extends Factory
             'sale' => fake()->boolean(90),
             'postage' => fake()->boolean(80),
             'url' => $randomUrl,
+            'created_at' => $createdAt,
+            'updated_at' => $updatedAt,
         ];
     }
 }
