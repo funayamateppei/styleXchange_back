@@ -28,8 +28,8 @@ class LocalSeeder extends Seeder
             ->create();
 
         // threads5件作成
-        $threads = Thread::factory()->count(1)->recycle($users)
-            ->has(ThreadImage::factory()->count(3))
+        $threads = Thread::factory()->count(5)->recycle($users)
+            ->has(ThreadImage::factory()->count(2))
             ->has(ThreadComment::factory()->count(3)->recycle($users)) // thread1つに対してコメント3件作成
             ->has(
                 Item::factory()->count(2)->state(function (array $attributes, Thread $thread) use ($users) {
