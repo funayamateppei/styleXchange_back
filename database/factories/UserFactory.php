@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -22,7 +23,9 @@ class UserFactory extends Factory
         $newAddress = substr($address, 8);
         // アイコンのダミーデータ作成
         $filename = fake()->file('public/icon_images', 'public/storage/icon_images', false);
-        $path = "/storage/icon_images/$filename";
+        $path = "icon_images/$filename";
+        $content = Storage::disk('public')->get($path);
+        Storage::disk('s3')->put($path, $content);
 
         return [
             'name' => fake()->name(),

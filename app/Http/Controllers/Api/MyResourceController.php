@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Support\Facades\Log;
 
 class MyResourceController extends Controller
@@ -54,16 +56,13 @@ class MyResourceController extends Controller
             if ($request->file('iconFile')) {
                 $file = $request->file('iconFile');
                 $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                $store = $file->storeAs('icon_images', $filename, 'public');
-                $icon_path = '/storage/' . $store;
-                $data['icon_path'] = $icon_path;
+                $store = $file->storeAs('icon_images', $filename, 's3');
+                $data['icon_path'] = $store;
                 // 以前のアイコン画像を削除
                 $previous_icon_path = Auth::user()->icon_path;
                 if ($previous_icon_path) {
-                    $relative_path = Str::substr($previous_icon_path, 9);
-                    if (File::exists(storage_path('app/public/' . $relative_path))) {
-                        $delete = File::delete(storage_path('app/public/' . $relative_path));
-                        Log::debug($delete);
+                    if (Storage::disk('s3')->exists($previous_icon_path)) {
+                        $delete = Storage::disk('s3')->delete($previous_icon_path);
                     }
                 }
             }
