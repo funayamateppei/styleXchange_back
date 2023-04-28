@@ -102,10 +102,10 @@ Route::get('/timeline', [InfinityScrollController::class, 'getTimelineThreads'])
 // 出品ページで使うカテゴリの情報を返すエンドポイント ISR
 Route::get('/categories', [ExhibitController::class, 'categories'])->name('categories');
 
-// フォロー欄 特定のユーザーとログインしているユーザーがフォロー済かの情報取得 SSR+CSR
-Route::get('/follows/{id}', [FollowController::class, 'getFollows'])->name('getFollows');
 // 特定のユーザーのマイページ情報 ISR+CSR
 Route::get('/user/{id}', [UserResourceController::class, 'userData'])->name('userData');
+// フォロー欄 特定のユーザーとログインしているユーザーがフォロー済かの情報取得 SSR+CSR
+Route::get('/follows/{id}', [FollowController::class, 'getFollows'])->name('getFollows');
 
 // 特定のthreadの情報 CSR+ISR
 Route::prefix('/threads')

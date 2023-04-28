@@ -10,6 +10,7 @@ use App\Models\ThreadComment;
 use App\Models\ThreadImage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
@@ -117,11 +118,10 @@ class ThreadController extends Controller
                 $delete_thread_image_id = $request->input('deletedImageIds');
                 foreach ($delete_thread_image_id as $id) {
                     $threadImage = ThreadImage::find($id);
-                    $originalFileName = $threadImage->original_file_name;
+                    $previous_path = $threadImage->path;
                     $threadImage->delete();
-                    if (File::exists(storage_path('app/public/' . 'thread_images/' . $originalFileName))) {
-                        $delete = File::delete(storage_path('app/public/' . 'thread_images/' . $originalFileName));
-                        Log::debug($delete);
+                    if (Storage::disk('s3')->exists($previous_path)) {
+                        Storage::disk('s3')->delete($previous_path);
                     }
                 }
             }
@@ -129,8 +129,7 @@ class ThreadController extends Controller
             if ($request->file('newImages')) {
                 foreach ($request->file('newImages') as $image) {
                     $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-                    $store = $image->storeAs('thread_images', $filename, 'public');
-                    $path = '/storage/' . $store;
+                    $path = $image->storeAs('thread_images', $filename, 's3');
                     $threadImageData = [
                         'thread_id' => $thread_id,
                         'path' => $path,

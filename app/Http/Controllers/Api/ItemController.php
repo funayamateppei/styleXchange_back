@@ -13,6 +13,7 @@ use App\Models\Thread;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
@@ -60,7 +61,6 @@ class ItemController extends Controller
     {
         $id = $request['id'];
         $data = $request->get('comment');
-        // Log::debug($data); // 確認用
         $comment = [
             'comment' => $data,
             'item_id' => $id,
@@ -103,11 +103,10 @@ class ItemController extends Controller
                 $delete_item_image_id = $request->input('deletedImageIds');
                 foreach ($delete_item_image_id as $id) {
                     $itemImage = ItemImage::find($id);
-                    $originalFileName = $itemImage->original_file_name;
+                    $previous_path = $itemImage->path;
                     $itemImage->delete();
-                    if (File::exists(storage_path('app/public/' . 'item_images/' . $originalFileName))) {
-                        $delete = File::delete(storage_path('app/public/' . 'item_images/' . $originalFileName));
-                        Log::debug($delete);
+                    if (Storage::disk('s3')->exists($previous_path)) {
+                        Storage::disk('s3')->delete($previous_path);
                     }
                 }
             }
@@ -115,8 +114,7 @@ class ItemController extends Controller
             if ($request->file('newImages')) {
                 foreach ($request->file('newImages') as $image) {
                     $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-                    $store = $image->storeAs('item_images', $filename, 'public');
-                    $path = '/storage/' . $store;
+                    $path = $image->storeAs('item_images', $filename, 's3');
                     $threadImageData = [
                         'item_id' => $item_id,
                         'path' => $path,
