@@ -107,9 +107,9 @@ class MyResourceController extends Controller
         $isThreadSelect = $request['isThreadSelect'];
         Log::debug($isThreadSelect);
         if ($isThreadSelect == 1) {
-            $data = $user->likedThreadBy()->with('threadImages')->orderBy('created_at', 'desc')->paginate(15);
+            $data = $user->likedThreadBy()->with('threadImages')->orderBy('created_at', 'desc')->paginate(20);
         } else if ($isThreadSelect == 0) {
-            $data = $user->likedItemBy()->with('itemImages')->orderBy('created_at', 'desc')->paginate(15);
+            $data = $user->likedItemBy()->with('itemImages')->orderBy('created_at', 'desc')->paginate(20);
         }
         return response()->json($data);
     }
@@ -119,7 +119,7 @@ class MyResourceController extends Controller
     {
         $id = Auth::id();
         $data = User::where('id', $id)->first();
-        $items = $data->bookmarkedBy()->with('threadImages')->orderBy('created_at', 'desc')->paginate(15);
+        $items = $data->bookmarkedBy()->with('threadImages')->orderBy('created_at', 'desc')->paginate(20);
         return response()->json($items);
     }
 }
