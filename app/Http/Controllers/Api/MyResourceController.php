@@ -63,7 +63,6 @@ class MyResourceController extends Controller
                 if ($previous_icon_path) {
                     if (Storage::disk('s3')->exists($previous_icon_path)) {
                         $delete = Storage::disk('s3')->delete($previous_icon_path);
-                        Log::debug($delete);
                     }
                 }
             }
