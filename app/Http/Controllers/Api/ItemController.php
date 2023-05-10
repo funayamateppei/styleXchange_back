@@ -104,9 +104,9 @@ class ItemController extends Controller
                 foreach ($delete_item_image_id as $id) {
                     $itemImage = ItemImage::find($id);
                     $previous_path = $itemImage->path;
-                    $itemImage->delete();
+                    $itemImage->delete(); // レコード削除
                     if (Storage::disk('s3')->exists($previous_path)) {
-                        Storage::disk('s3')->delete($previous_path);
+                        Storage::disk('s3')->delete($previous_path); // s3に保存されているファイル削除
                     }
                 }
             }
