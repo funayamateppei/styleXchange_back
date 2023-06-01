@@ -119,9 +119,9 @@ class ThreadController extends Controller
                 foreach ($delete_thread_image_id as $id) {
                     $threadImage = ThreadImage::find($id);
                     $previous_path = $threadImage->path;
-                    $threadImage->delete();
+                    $threadImage->delete(); // レコード削除
                     if (Storage::disk('s3')->exists($previous_path)) {
-                        Storage::disk('s3')->delete($previous_path);
+                        Storage::disk('s3')->delete($previous_path); // s3に保存されているファイル削除
                     }
                 }
             }
