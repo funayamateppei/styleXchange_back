@@ -23,7 +23,6 @@ class InfinityScrollController extends Controller
         if ($sort === 'like') {
             $data = Thread::with(['threadImages', 'user', 'items'])
                 ->withCount(['bookmarkedThreads', 'likedThreads'])
-                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
                 ->orderBy('liked_threads_count', 'desc')
                 ->orderBy('bookmarked_threads_count', 'desc')
                 ->orderBy('updated_at', 'desc')
