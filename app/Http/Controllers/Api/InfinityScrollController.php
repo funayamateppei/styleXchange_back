@@ -49,7 +49,6 @@ class InfinityScrollController extends Controller
             })
                 ->with(['threadImages', 'user', 'items'])
                 ->withCount(['bookmarkedThreads', 'likedThreads'])
-                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
                 ->orderBy('liked_threads_count', 'desc')
                 ->orderBy('bookmarked_threads_count', 'desc')
                 ->orderBy('updated_at', 'desc')
@@ -79,7 +78,6 @@ class InfinityScrollController extends Controller
             })
                 ->with(['threadImages', 'user', 'items'])
                 ->withCount(['bookmarkedThreads', 'likedThreads'])
-                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
                 ->orderBy('liked_threads_count', 'desc')
                 ->orderBy('bookmarked_threads_count', 'desc')
                 ->orderBy('updated_at', 'desc')
@@ -130,7 +128,6 @@ class InfinityScrollController extends Controller
             })
                 ->with(['threadImages', 'user'])
                 ->withCount(['likedThreads', 'bookmarkedThreads'])
-                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
                 ->orderBy('liked_threads_count', 'desc')
                 ->orderBy('bookmarked_threads_count', 'desc')
                 ->orderBy('updated_at', 'desc')
@@ -172,7 +169,6 @@ class InfinityScrollController extends Controller
                 ->where('category_id', $category_id)
                 ->with(['itemImages', 'user'])
                 ->withCount('likedItems')
-                ->where('updated_at', '>=', $oneMonthAgo) // 1ヶ月前以降のデータを取得
                 ->orderBy('liked_items_count', 'desc')
                 ->orderBy('updated_at', 'desc')
                 ->paginate(8);
