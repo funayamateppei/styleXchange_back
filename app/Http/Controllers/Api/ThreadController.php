@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Thread;
 use App\Models\ThreadComment;
 use App\Models\ThreadImage;
+use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -154,8 +155,32 @@ class ThreadController extends Controller
     // 削除処理
     public function deleteThread(Request $request)
     {
-        $thread_id = $request->route('id');
-        $threadDeleteResponse = Thread::find($thread_id)->delete();
-        return response()->noContent();
+        DB::beginTransaction(); // トランザクションを開始
+        try {
+            $thread_id = $request->route('id');
+            // スレッドに関連する画像ファイルを削除
+            $threadImages = ThreadImage::where('thread_id', $thread_id)->get();
+            foreach ($threadImages as $threadImage) {
+                $imagePath = $threadImage->path;
+                Storage::disk('s3')->delete($imagePath);
+            }
+            // アイテムに関連する画像ファイルを削除
+            $items = Item::where('thread_id', $thread_id)->get();
+            foreach ($items as $item) {
+                $itemImages = $item->itemImages()->get();
+                foreach ($itemImages as $itemImage) {
+                    $imagePath = $itemImage->path;
+                    Storage::disk('s3')->delete($imagePath);
+                }
+            }
+            $threadDeleteResponse = Thread::find($thread_id)->delete();
+            DB::commit();
+            return response()->noContent();
+        } catch (\Exception $e) {
+            // エラー処理
+            Log::debug($e);
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
